@@ -8,82 +8,123 @@ Stable tag: 0.4.14
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-== Fork Information ==
+== About This Fork ==
 
-This is a fork of [fontsampler-wordpress-plugin](https://github.com/kontur/fontsampler-wordpress-plugin) maintained by:
+This is an actively maintained fork of the original [fontsampler-wordpress-plugin](https://github.com/kontur/fontsampler-wordpress-plugin).
 
-* **Abdurrahman Hanif** ([@abdrhnf](https://github.com/abdrhnf))
-* **Bahasatype** ([bahasatype.com](https://bahasatype.com))
+**Currently Developed By:**
+* **Abdurrahman Hanif** ([@abdrhnf](https://github.com/abdrhnf)) from **Bahasatype** ([bahasatype.com](https://bahasatype.com))
 
-**Fork Repository**: [https://github.com/abdrhnf/fontsampler-wordpress-plugin](https://github.com/abdrhnf/fontsampler-wordpress-plugin)
-
-**Original Plugin**: [https://github.com/kontur/fontsampler-wordpress-plugin](https://github.com/kontur/fontsampler-wordpress-plugin)
+**Repository:**
+* **This Fork**: [https://github.com/abdrhnf/fontsampler-wordpress-plugin](https://github.com/abdrhnf/fontsampler-wordpress-plugin)
+* **Original**: [https://github.com/kontur/fontsampler-wordpress-plugin](https://github.com/kontur/fontsampler-wordpress-plugin)
 
 == What's New in This Fork ==
 
-This fork includes the following improvements and fixes:
+This fork is actively maintained and includes the following improvements:
 
-* **WordPress 6.7+ Compatibility**: Fixed translation loading warnings and updated compatibility metadata
-* **PHP 8.x Compatibility**: Fixed deprecation warnings for PHP 8.x (Twig Node::count())
-* **Security Enhancements**: Added input sanitization for AJAX handlers
-* **HTML Output Fixes**: Fixed data attributes and style tag issues in interface preview
-* **Bug Fixes**: Fixed ajax_get_mock_fontsampler HTML output errors
+* ✅ **WordPress 6.7+ Compatible** - Fixed compatibility issues with the latest WordPress version
+* ✅ **PHP 8.x Compatible** - Fixed deprecation warnings for modern PHP versions
+* ✅ **Security Improvements** - Enhanced input sanitization for better security
+* ✅ **Bug Fixes** - Fixed HTML output errors in admin interface preview
+* ✅ **Better Code Quality** - Improved error handling and code structure
 
 == Description ==
 
-This is a plugin directed primarily at type designers, lettering artists, foundries or resellers to showcase webfonts by embedding interactive type testers via shortcodes.
+Fontsampler is a WordPress plugin that helps type designers, lettering artists, foundries, and font resellers showcase their webfonts with interactive preview tools.
+
+**Key Features:**
+* Create interactive font previews using simple shortcodes
+* Users can type and test fonts directly on your website
+* Customizable interface with sliders for font size, letter spacing, and line height
+* Support for multiple fonts in one preview
+* Works with any language and script direction (including right-to-left)
+* No coding knowledge required
 
 == Description ==
 
 This is a plugin directed primarily at type designers, lettering artists, foundries or resellers using Wordpress to showcase their fonts without the need for coding knowledge.
 
-The plugin allows you to embed interactive webfont specimens on your site via shortcodes. Users can preview, type with, and switch the webfonts in a preview, as well as use other interface options to manipulate the font sample.
+== How It Works ==
 
-After installing the plugin and creating a Fontsampler, you are able to showcase a set of webfonts by adding a simple [fontsampler id=123] shortcode to any page or post.
+1. **Install the Plugin** - Upload and activate Fontsampler through your WordPress admin panel
+2. **Upload Fonts** - Add your webfont files (WOFF format) through the Fontsampler menu
+3. **Create a Preview** - Set up a Fontsampler with your fonts and customize the interface
+4. **Add to Your Site** - Use the shortcode `[fontsampler id=123]` anywhere on your site
 
-More information and clickable examples available [on the plugin website](http://fontsampler.johannesneumeier.com).
+That's it! Your visitors can now interact with your fonts directly on your website.
 
-Features include:
+== Features ==
 
-* Interactive text field where users can type to preview the font
-* Controls for switching between fonts (if several are added to one Fontsampler)
-* Slider controls for manipulating font size, letter spacing & line height
-* Switches for alignment, inverting the text and background color, selecting language for testing locl features
-* Automatic detection and controls for testing Opentype features
-* Supports any language script and script direction
-* Supports woff files (woff2 support will hopefully be added soon, support for eot and ttf has been phased out)
+**Interactive Preview:**
+* Users can type and test fonts in real-time
+* Switch between multiple fonts in one preview
+* Adjust font size, letter spacing, and line height with sliders
+* Change text alignment and invert colors
+* Test OpenType features automatically
+
+**Customization:**
+* Customize the interface layout and styling
+* Add preset sample texts for users to try
+* Support for any language and script direction (RTL/LTR)
 * Unlimited Fontsamplers per page
-* Customizable interface layout
-* Customizable interface styling
-* Customizable dropdown with preset texts
+
+**Technical:**
+* Supports WOFF font format
+* Works with any WordPress theme
+* Mobile-friendly interface
+* No coding required
+
+More information and examples available on the [original plugin website](http://fontsampler.johannesneumeier.com).
 
 == Installation ==
 
-The easiest way to install is going to: Plugins > Add new > Search for "Fontsampler" and install from there.
+**Option 1: Manual Installation (Recommended for this fork)**
 
-Alternatively you can:
+1. Download the plugin from [GitHub](https://github.com/abdrhnf/fontsampler-wordpress-plugin)
+2. Upload the `fontsampler` folder to `/wp-content/plugins/` directory on your server
+3. Go to WordPress Admin > Plugins
+4. Find "Fontsampler" and click "Activate"
+5. Go to Fontsampler menu in the sidebar to start using
 
-1. Upload the plugin files to the `/wp-content/plugins/fontsampler` directory, or install the plugin through the WordPress plugins screen directly.
-2. Activate the plugin through the 'Plugins' screen in WordPress
-3. In the admin sidebar go to Fontsampler to upload font files and create your Fontsamplers
+**Option 2: WordPress Plugin Directory (Original Version)**
+
+If you prefer the original version, you can install from WordPress plugin directory:
+1. Go to Plugins > Add New
+2. Search for "Fontsampler"
+3. Install and activate
+
+**After Installation:**
+* Go to the Fontsampler menu in your WordPress admin sidebar
+* Upload your font files (WOFF format)
+* Create your first Fontsampler preview
 
 == Frequently Asked Questions ==
 
-= Is the Fontsampler plugin free? =
+= Is Fontsampler free to use? =
 
-Absolutely. Fontsampler is free to use Open Source software developed by Johannes Neumeier of [Underscore Type](https://underscoretype.com). You can use it for personal as well as commercial websites. A big portion of the initial development has been funded via an IndieGoGo campaign (see the About tab in the plugin) and you can support development by donating to the plugin development (there is [a link in the plugin page sidebar](https://wordpress.org/plugins/fontsampler/)).
+Yes! Fontsampler is free and open source software. You can use it for both personal and commercial websites without any restrictions.
 
-= Can I control which user interface elements are visible? =
+**Original Developer:** Johannes Neumeier of [Underscore Type](https://underscoretype.com)  
+**Current Maintainer:** Abdurrahman Hanif (@abdrhnf) from [Bahasatype](https://bahasatype.com)
 
-Absolutely. You can enable and arrange each interface element for every Fontsampler. You can set custom styles and options for all Fontsamplers on your site, or customize them for each Fontsampler individually.
+You can support the original development by [donating](https://wordpress.org/plugins/fontsampler/). For issues or contributions to this fork, please visit the [GitHub repository](https://github.com/abdrhnf/fontsampler-wordpress-plugin).
 
-= Do I have to configure each Fontsampler if I have several? =
+= Can I customize the interface? =
 
-You can update site-wide settings for layout, features and styling that get applied to all Fontsamplers. All of those options can also be overwritten for each individual Fontsampler, so you can have more customized styling for some previews.
+Yes! You have full control over:
+* Which interface elements are visible (sliders, buttons, dropdowns, etc.)
+* The layout and arrangement of elements
+* Colors, fonts, and styling
+* Site-wide defaults or individual Fontsampler settings
 
-= What webfont filetypes are supported? =
+= Do I need to configure each Fontsampler separately? =
 
-Currently only the WOFF format is supported, and support for WOFF2 will hopefully soon follow. Legacy webfont formats EOT and TTF are being phased out beginning with version 0.4.0.
+No. You can set default settings that apply to all Fontsamplers on your site. Then, if needed, you can customize individual Fontsamplers with different settings.
+
+= What font formats are supported? =
+
+Currently, **WOFF format** is fully supported. WOFF2 support may be added in the future. Legacy formats (EOT and TTF) are no longer supported.
 
 = Does the plugin support displaying non-latin fonts? =
 
@@ -103,9 +144,12 @@ For more advanced users / developers you can trigger the shortcode programmatica
 
 That is possible, you only need to activate the corresponding user interface element and Fontsampler will automatically detect all available OpenType features from the provided webfont files. Using and testing locl features is implemented via a separate language dropdown.
 
-= Are there any specific requirements for using Fontsampler? =
+= What are the system requirements? =
 
-Fontsampler works with PHP 7.0.0 or higher. PHP is free software and does not require any license other than the open source licenses shipped with it. Those versions of PHP are also required for security reasons aside from Fontsampler, so keeping those up to date is a good idea either way.
+**WordPress:** Version 5.0 or higher (tested up to 6.7+)  
+**PHP:** Version 7.0.0 or higher (PHP 8.x recommended)
+
+These are standard requirements for modern WordPress installations, so most hosting providers already meet these requirements.
 
 = Are my web fonts secure when displaying them with Fontsampler? =
 
