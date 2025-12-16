@@ -1,10 +1,10 @@
 # Fontsampler WordPress Plugin (Fork)
 
-This is an **actively maintained fork** of the original Fontsampler WordPress Plugin, updated for WordPress 6.7+ and PHP 8.x compatibility.
+An actively maintained fork of the original Fontsampler WordPress Plugin, updated for WordPress 6.7+ and PHP 8.x compatibility.
 
-## 🚀 Current Status
+## Current Status
 
-**Development Status:** ✅ **ACTIVELY MAINTAINED**
+**Development Status:** ACTIVELY MAINTAINED
 
 This fork is currently being developed and maintained by:
 - **Abdurrahman Hanif** ([@abdrhnf](https://github.com/abdrhnf))
@@ -14,21 +14,21 @@ This fork is currently being developed and maintained by:
 
 **Original Plugin:** [https://github.com/kontur/fontsampler-wordpress-plugin](https://github.com/kontur/fontsampler-wordpress-plugin) (Development discontinued as of December 2023)
 
-## ✨ What's New in This Fork
+## What's New in This Fork
 
 This fork includes important updates and fixes:
 
-- ✅ **WordPress 6.7+ Compatible** - Fixed compatibility issues with the latest WordPress version
-- ✅ **PHP 8.x Compatible** - Fixed deprecation warnings for modern PHP versions
-- ✅ **Security Improvements** - Enhanced input sanitization for AJAX handlers
-- ✅ **Bug Fixes** - Fixed HTML output errors in admin interface preview
-- ✅ **Better Code Quality** - Improved error handling and code structure
+- **WordPress 6.7+ Compatible** - Fixed compatibility issues with the latest WordPress version
+- **PHP 8.x Compatible** - Fixed deprecation warnings for modern PHP versions
+- **Security Improvements** - Enhanced input sanitization for AJAX handlers
+- **Bug Fixes** - Fixed HTML output errors in admin interface preview
+- **Better Code Quality** - Improved error handling and code structure
 
-## 📖 What is Fontsampler?
+## What is Fontsampler?
 
 Fontsampler is a WordPress plugin that allows you to embed interactive webfont previews in your websites. Perfect for type designers, lettering artists, foundries, and font resellers who want to showcase their fonts with an interactive tester.
 
-## 🎯 How Does It Work?
+## How Does It Work?
 
 After installing and activating the plugin, you can create **Fontsamplers** in the WordPress admin. Each Fontsampler can be embedded in any WordPress Page or Post with a simple shortcode:
 
@@ -43,7 +43,7 @@ The plugin will render an interactive interface where visitors can:
 - Test OpenType features
 - Customize text alignment and colors
 
-## ⚙️ Configuration
+## Configuration
 
 Each Fontsampler instance can be fully configured:
 - **Features available** to the user (sliders, buttons, dropdowns)
@@ -51,7 +51,7 @@ Each Fontsampler instance can be fully configured:
 - **Fonts** used in this instance
 - **Custom CSS** styling
 
-## 🔧 Advanced Shortcode Use
+## Advanced Shortcode Use
 
 ### Set Initial Text
 
@@ -92,7 +92,7 @@ echo do_shortcode('[fontsampler fonts="' . $fonts_json . '"]');
 ?>
 ```
 
-## 🎣 Hooks
+## Hooks
 
 ### Filter: `fontsampler_enqueue_styles`
 
@@ -102,7 +102,7 @@ Fontsampler styles are automatically added to pages with the shortcode. If execu
 add_filter('fontsampler_enqueue_styles', '__return_true');
 ```
 
-## 📡 JavaScript Events
+## JavaScript Events
 
 React to Fontsampler events in your theme:
 
@@ -131,7 +131,7 @@ $("body").on("fontsampler.event.activatefont", ".fontsampler-wrapper", function 
 });
 ```
 
-## 📦 Installation
+## Installation
 
 ### Option 1: Install from GitHub (This Fork)
 
@@ -145,12 +145,12 @@ $("body").on("fontsampler.event.activatefont", ".fontsampler-wrapper", function 
 
 The original version is available at [WordPress Plugin Directory](https://wordpress.org/plugins/fontsampler/), but development has been discontinued.
 
-## 🔧 Requirements
+## Requirements
 
 - **WordPress:** 5.0 or higher (tested up to 6.7+)
 - **PHP:** 7.0.0 or higher (PHP 8.x recommended)
 
-## 🤝 Contributing
+## Contributing
 
 **Pull requests are welcome!** Please:
 
@@ -161,17 +161,17 @@ The original version is available at [WordPress Plugin Directory](https://wordpr
 
 For issues or feature requests, please open an issue on the [GitHub repository](https://github.com/abdrhnf/fontsampler-wordpress-plugin/issues).
 
-## 📝 Alternative for Developers
+## Alternative for Developers
 
 If you're a developer looking to implement similar functionality, check out [fontsampler-js](https://github.com/underscoretype/fontsampler-js) - the JavaScript library that powers this plugin.
 
-## 📄 License
+## License
 
 This code is distributed under the **GNU General Public License v3.0**.
 
 [See license](LICENSE.txt) | [Read simplified version](http://choosealicense.com/licenses/gpl-3.0/#)
 
-## 👤 Credits
+## Credits
 
 **Original Developer:** Johannes Neumeier (2016-2021)  
 **Current Maintainer:** Abdurrahman Hanif ([@abdrhnf](https://github.com/abdrhnf)) from [Bahasatype](https://bahasatype.com)
