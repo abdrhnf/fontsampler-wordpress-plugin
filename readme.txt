@@ -1,12 +1,26 @@
 === Plugin Name ===
-Contributors: kontur
+Contributors: kontur, abdrhnf
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LSK5YQHHCGGYS
 Tags: fonts, font, typeface, preview, shortcode
 Requires at least: 5.0
-Tested up to: 5.7
+Tested up to: 6.7
 Stable tag: 0.4.14
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
+
+== Fork Information ==
+
+This is a fork of fontsampler-wordpress-plugin maintained by:
+- **Abdurrahman Hanif** (@abdrhnf)
+- **Bahasatype** (https://bahasatype.com)
+
+Original Plugin: https://github.com/kontur/fontsampler-wordpress-plugin
+
+This fork includes:
+- WordPress 6.7+ compatibility fixes
+- PHP 8.x compatibility improvements
+- Security enhancements for AJAX handlers
+- HTML output error fixes
 
 This is a plugin directed primarily at type designers, lettering artists, foundries or resellers to showcase webfonts by embedding interactive type testers via shortcodes.
 

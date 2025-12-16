@@ -851,37 +851,151 @@ class FontsamplerPlugin {
 
         $layout = new FontsamplerLayout();
 
-        $data = $_POST['data'];
+        // Sanitize input data for security
+        $data = isset($_POST['data']) ? map_deep($_POST['data'], 'sanitize_text_field') : array();
 
         // data['ui_order'] contains a string with all the blocks transmitted
         // from the admin UI
-        $fields = array_keys($layout->stringToArray($data['ui_order']));
+        // Ensure ui_order is not empty, use default if needed
+        $ui_order = isset($data['ui_order']) && !empty($data['ui_order']) ? $data['ui_order'] : '';
+        
+        // If ui_order is empty, use default blocks to generate fields
+        if (empty($ui_order)) {
+            $defaultBlocks = $layout->getDefaultBlocks();
+            $fields = array_keys($defaultBlocks);
+            // Generate ui_order from default blocks
+            $ui_order = $layout->arrayToString($defaultBlocks, null);
+        } else {
+            $fields = array_keys($layout->stringToArray($ui_order));
+        }
 
         // fill all these with a simple "1", like they would be fetched from a
         // set in the db that has those fields enabled (or content in them signifiying
         // they should render)
-        $fieldsFromUI = array_combine($fields, array_fill(0, sizeof($fields), 1));
+        // Only call array_combine if fields array is not empty
+        $fieldsFromUI = !empty($fields) ? array_combine($fields, array_fill(0, sizeof($fields), 1)) : array();
+
+        // Get default settings first
+        $options = $this->db->get_settings();
 
         // emulate a set from the passed in mock data
         // if any field like "specimen" got not just passed in ui_order but as explicit
         // field with content, that overwrites the "1" array value
+        // Set initial text from data or use default
+        $initial_text = isset($data['initial']) && !empty($data['initial']) 
+            ? $data['initial'] 
+            : 'Layout preview only, for arranging the layout blocks';
+        
         $set = array_merge($fieldsFromUI, $data, array(
             'multiline' => 0,
-            'is_ltr' => 1
+            'is_ltr' => 1,
+            'initial' => $initial_text
         ));
 
+        // Set ui_columns from data with fallback to default
+        if (!isset($set['ui_columns']) || empty($set['ui_columns'])) {
+            $set['ui_columns'] = isset($data['ui_columns']) && !empty($data['ui_columns']) 
+                ? intval($data['ui_columns']) 
+                : (isset($options['ui_columns']) ? $options['ui_columns'] : 3);
+        }
+
         $font = plugin_dir_url(__FILE__) . 'admin/fonts/PTS55F-webfont.woff';
-        $set['fonts'] = array('woff' => $font);
+        // Set fonts in the same format as get_set() returns
+        // Format: array of arrays with id, name, and format URLs
+        $set['fonts'] = array(array(
+            'id' => 0, // Mock ID for preview
+            'name' => 'Preview Font',
+            'woff' => $font
+        ));
 
         // from this set create all blocks; pass in the generated set to make
         // sure all fields sync
+        // Ensure ui_order exists in set - use the one we generated earlier or default blocks
+        if (empty($set['ui_order'])) {
+            $set['ui_order'] = !empty($ui_order) ? $ui_order : $layout->arrayToString($layout->getDefaultBlocks(), $set);
+        }
         $blocks = $layout->stringToArray($set['ui_order'], $set);
-        $options = $this->db->get_settings();
-        $settings = $options; ?>
+        
+        // If blocks is still empty, use default blocks
+        if (empty($blocks)) {
+            $blocks = $layout->getDefaultBlocks();
+            $set['ui_order'] = $layout->arrayToString($blocks, $set);
+        }
+        
+        // Get the calculated initial values for data-font-size- etc, where the set overwrites options
+        // This is the same logic as in fontsampler_shortcode()
+        $data_initial = array();
+        foreach ($set as $key => $value) {
+            $data_initial[$key] = $value;
+            if ($value === null && isset($options[$key]) && $options[$key] !== null) {
+                $data_initial[$key] = $options[$key];
+            }
+        }
+        
+        // Ensure all required fields from options are in data_initial
+        foreach ($options as $key => $value) {
+            if (!isset($data_initial[$key])) {
+                $data_initial[$key] = $value;
+            }
+        }
+        
+        // Generate $fonts variable like in fontsampler_shortcode() - this is used by interface.php
+        // $fonts is an associative array: font_id => font_url
+        $fonts = $this->helpers->get_best_file_from_fonts($set['fonts']);
+        
+        // Set initial_font if not set
+        if (!isset($set['initial_font']) || empty($set['initial_font'])) {
+            $set['initial_font'] = 0; // Use first font (mock ID 0)
+        }
+        
+        // Set initialFont and initialFontNameOverwrite if needed
+        $initialFont = isset($fonts[$set['initial_font']]) ? $fonts[$set['initial_font']] : false;
+        $initialFontNameOverwrite = 'Preview Font';
+        if ($initialFont) {
+            $firstFont = array_filter($set['fonts'], function ($item) use ($set) {
+                if ($item['id'] === $set['initial_font']) {
+                    return $item;
+                }
+            });
+            if (!empty($firstFont)) {
+                $initialFontNameOverwrite = array_pop($firstFont)['name'];
+            }
+        }
+        
+        $settings = $options;
+        
+        // Set attribute_text to null for mock preview (no shortcode attribute override)
+        $attribute_text = null;
+        
+        // Ensure $set has all required fields from options as fallback
+        foreach ($options as $key => $value) {
+            if (!isset($set[$key]) || $set[$key] === null) {
+                $set[$key] = $value;
+            }
+        }
+        
+        // Ensure data_initial has all slider values with proper defaults
+        $slider_fields = array('fontsize', 'letterspacing', 'lineheight');
+        foreach ($slider_fields as $field) {
+            if (!isset($data_initial[$field . '_min']) || empty($data_initial[$field . '_min'])) {
+                $data_initial[$field . '_min'] = isset($options[$field . '_min']) ? $options[$field . '_min'] : 10;
+            }
+            if (!isset($data_initial[$field . '_max']) || empty($data_initial[$field . '_max'])) {
+                $data_initial[$field . '_max'] = isset($options[$field . '_max']) ? $options[$field . '_max'] : 100;
+            }
+            if (!isset($data_initial[$field . '_initial']) || empty($data_initial[$field . '_initial'])) {
+                $data_initial[$field . '_initial'] = isset($options[$field . '_initial']) ? $options[$field . '_initial'] : 20;
+            }
+            if (!isset($data_initial[$field . '_unit']) || empty($data_initial[$field . '_unit'])) {
+                $data_initial[$field . '_unit'] = isset($options[$field . '_unit']) ? $options[$field . '_unit'] : 'px';
+            }
+        }
+        ?>
 
 			<div class='fontsampler-wrapper on-loading'
 			     data-fonts='<?php echo $font; ?>'
 				 data-initial-font='<?php echo $font; ?>'
+				 data-initial-font-name-overwrite='<?php echo $initialFontNameOverwrite; ?>'
 			 >
 				 <?php include 'includes/interface.php'; ?>
 			</div>

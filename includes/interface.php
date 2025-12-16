@@ -233,11 +233,11 @@
 							<?php if (!$set['is_ltr']): echo ' dir="rtl" '; endif; ?>
                             
 							style="text-align: <?php echo !empty($set['alignment_initial']) ? $set['alignment_initial'] : $options['alignment_initial']; ?>;
-								<?php if (isset($data_initial)): ?>
-								    font-size: <?php echo $data_initial['fontsize_initial'] . $data_initial['fontsize_unit']; ?>;
-								    letter-spacing: <?php echo $data_initial['letterspacing_initial'] . $data_initial['letterspacing_unit']; ?>;
-								    line-height: <?php echo $data_initial['lineheight_initial'] . $data_initial['lineheight_unit']; ?>;"
-								<?php endif; ?>
+								<?php if (isset($data_initial) && !empty($data_initial)): ?>
+								    font-size: <?php echo isset($data_initial['fontsize_initial']) ? $data_initial['fontsize_initial'] : ''; ?><?php echo isset($data_initial['fontsize_unit']) ? $data_initial['fontsize_unit'] : 'px'; ?>;
+								    letter-spacing: <?php echo isset($data_initial['letterspacing_initial']) ? $data_initial['letterspacing_initial'] : ''; ?><?php echo isset($data_initial['letterspacing_unit']) ? $data_initial['letterspacing_unit'] : 'px'; ?>;
+								    line-height: <?php echo isset($data_initial['lineheight_initial']) ? $data_initial['lineheight_initial'] : ''; ?><?php echo isset($data_initial['lineheight_unit']) ? $data_initial['lineheight_unit'] : '%'; ?>;
+								<?php endif; ?>"
 							data-notdef="<?php echo isset($set['notdef']) && $set['notdef'] !== null ? $set['notdef'] : $options['notdef']; ?>"
 						
 						><?php echo $initial_text; ?></div>
