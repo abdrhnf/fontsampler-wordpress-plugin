@@ -41,10 +41,6 @@ Fontsampler is a WordPress plugin that helps type designers, lettering artists, 
 * Works with any language and script direction (including right-to-left)
 * No coding knowledge required
 
-== Description ==
-
-This is a plugin directed primarily at type designers, lettering artists, foundries or resellers using Wordpress to showcase their fonts without the need for coding knowledge.
-
 == How It Works ==
 
 1. **Install the Plugin** - Upload and activate Fontsampler through your WordPress admin panel
