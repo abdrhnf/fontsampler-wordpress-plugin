@@ -10,17 +10,26 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 == Fork Information ==
 
-This is a fork of fontsampler-wordpress-plugin maintained by:
-- **Abdurrahman Hanif** (@abdrhnf)
-- **Bahasatype** (https://bahasatype.com)
+This is a fork of [fontsampler-wordpress-plugin](https://github.com/kontur/fontsampler-wordpress-plugin) maintained by:
 
-Original Plugin: https://github.com/kontur/fontsampler-wordpress-plugin
+* **Abdurrahman Hanif** ([@abdrhnf](https://github.com/abdrhnf))
+* **Bahasatype** ([bahasatype.com](https://bahasatype.com))
 
-This fork includes:
-- WordPress 6.7+ compatibility fixes
-- PHP 8.x compatibility improvements
-- Security enhancements for AJAX handlers
-- HTML output error fixes
+**Fork Repository**: [https://github.com/abdrhnf/fontsampler-wordpress-plugin](https://github.com/abdrhnf/fontsampler-wordpress-plugin)
+
+**Original Plugin**: [https://github.com/kontur/fontsampler-wordpress-plugin](https://github.com/kontur/fontsampler-wordpress-plugin)
+
+== What's New in This Fork ==
+
+This fork includes the following improvements and fixes:
+
+* **WordPress 6.7+ Compatibility**: Fixed translation loading warnings and updated compatibility metadata
+* **PHP 8.x Compatibility**: Fixed deprecation warnings for PHP 8.x (Twig Node::count())
+* **Security Enhancements**: Added input sanitization for AJAX handlers
+* **HTML Output Fixes**: Fixed data attributes and style tag issues in interface preview
+* **Bug Fixes**: Fixed ajax_get_mock_fontsampler HTML output errors
+
+== Description ==
 
 This is a plugin directed primarily at type designers, lettering artists, foundries or resellers to showcase webfonts by embedding interactive type testers via shortcodes.
 
@@ -120,6 +129,15 @@ The [Github repository](https://github.com/kontur/fontsampler-wordpress-plugin) 
 6. This is how you include a Fontsampler in a page or post: Simply add the shortcode for the created Fontsampler to your text
 
 == Changelog ==
+
+= 0.4.14 (Fork by @abdrhnf) =
+* FIX: WordPress 6.7+ compatibility - Fixed translation loading warnings
+* FIX: PHP 8.x compatibility - Fixed Twig Node::count() deprecation warning
+* FIX: Security - Added input sanitization for ajax_get_mock_fontsampler AJAX handler
+* FIX: HTML output - Fixed data attributes and style tag closing in interface preview
+* FIX: ajax_get_mock_fontsampler - Fixed missing data_initial generation and empty slider values
+* UPDATE: Tested up to WordPress 6.7
+* UPDATE: Added fork information and attribution
 
 = 0.4.13 =
 * FIX: Fixed an issue that prevented CSS files from being re-written with changed settings
