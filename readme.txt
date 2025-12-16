@@ -117,7 +117,7 @@ Fontsampler relies on the information in the uploaded webfont files. As such, it
 
 = I'm a developer, how can I further customize and integrate the plugin to my site? =
 
-The [Github repository](https://github.com/kontur/fontsampler-wordpress-plugin) has more documentation about available PHP hooks and Javascript callbacks. For example you can dynamically trigger the shortcode and pass in fonts or react to the Fontsampler finishing to load. Overwriting Fontsampler specific CSS in a theme should be trivial and provide more options than the Backend user interface. You can also style specific instances by their class `.fontsampler-interface.fontsampler-id-xxx`. If you are missing a feature or hook, let me know in the support forum.
+The [original Github repository](https://github.com/kontur/fontsampler-wordpress-plugin) and [this fork](https://github.com/abdrhnf/fontsampler-wordpress-plugin) have more documentation about available PHP hooks and Javascript callbacks. For example you can dynamically trigger the shortcode and pass in fonts or react to the Fontsampler finishing to load. Overwriting Fontsampler specific CSS in a theme should be trivial and provide more options than the Backend user interface. You can also style specific instances by their class `.fontsampler-interface.fontsampler-id-xxx`. If you are missing a feature or hook, let me know in the support forum or open an issue on the repository.
 
 == Screenshots ==
 
