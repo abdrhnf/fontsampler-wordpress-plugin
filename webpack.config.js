@@ -8,7 +8,7 @@ module.exports = (env, argv) => {
         mode: isProduction ? 'production' : 'development',
         entry: {
             // Frontend bundle
-            fontsampler: './js/main.js',
+            fontsampler: './js/main-new.js',
             // Admin bundle  
             'fontsampler-admin': './admin/js/admin-main.js',
         },
