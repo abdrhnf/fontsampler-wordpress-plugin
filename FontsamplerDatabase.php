@@ -22,6 +22,13 @@ class FontsamplerDatabase {
 	private $layout;
 	private $settings_data_cols;
 
+	/**
+	 * Cache configuration
+	 */
+	private $cache_enabled = true;
+	private $cache_expiration = 3600; // 1 hour default
+	private $cache_prefix = 'fontsampler_';
+
 	function __construct( $wpdb, $fontsampler ) {
 		$this->wpdb = $wpdb;
 
@@ -33,6 +40,88 @@ class FontsamplerDatabase {
 		$this->fontsampler = $fontsampler;
 		$this->helpers     = new FontsamplerHelpers( $fontsampler );
 		$this->layout      = new FontsamplerLayout();
+
+		// Allow cache configuration via filters
+		$this->cache_enabled = apply_filters( 'fontsampler_cache_enabled', $this->cache_enabled );
+		$this->cache_expiration = apply_filters( 'fontsampler_cache_expiration', $this->cache_expiration );
+	}
+
+	/**
+	 * Generate cache key based on method and parameters
+	 *
+	 * @param string $method Method name
+	 * @param array $params Method parameters
+	 * @return string Cache key
+	 */
+	private function get_cache_key( $method, $params = array() ) {
+		$key = $this->cache_prefix . $method;
+		if ( ! empty( $params ) ) {
+			$key .= '_' . md5( serialize( $params ) );
+		}
+		return $key;
+	}
+
+	/**
+	 * Get data from cache
+	 *
+	 * @param string $key Cache key
+	 * @return mixed|false Cached data or false if not found
+	 */
+	private function get_cached( $key ) {
+		if ( ! $this->cache_enabled ) {
+			return false;
+		}
+		return get_transient( $key );
+	}
+
+	/**
+	 * Set data to cache
+	 *
+	 * @param string $key Cache key
+	 * @param mixed $data Data to cache
+	 * @param int $expiration Cache expiration in seconds (default: 1 hour)
+	 * @return bool True on success
+	 */
+	private function set_cache( $key, $data, $expiration = null ) {
+		if ( ! $this->cache_enabled ) {
+			return false;
+		}
+		if ( null === $expiration ) {
+			$expiration = $this->cache_expiration;
+		}
+		return set_transient( $key, $data, $expiration );
+	}
+
+	/**
+	 * Invalidate cache by pattern or specific key
+	 *
+	 * @param string|null $pattern Pattern to match (null = clear all fontsampler cache)
+	 * @return int Number of cache entries deleted
+	 */
+	private function invalidate_cache( $pattern = null ) {
+		global $wpdb;
+
+		if ( null === $pattern ) {
+			// Clear all fontsampler cache
+			$pattern = $this->cache_prefix . '%';
+		} else {
+			$pattern = $this->cache_prefix . $pattern . '%';
+		}
+
+		$sql = $wpdb->prepare(
+			"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+			'_transient_' . $pattern
+		);
+		$deleted = $wpdb->query( $sql );
+
+		// Also delete transient timeout entries
+		$sql = $wpdb->prepare(
+			"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+			'_transient_timeout_' . $pattern
+		);
+		$wpdb->query( $sql );
+
+		return $deleted;
 	}
 
 	/*
@@ -580,6 +669,13 @@ class FontsamplerDatabase {
 	 * Read from fontsampler sets table
 	 */
 	function get_sets( $offset = null, $num_rows = null, $order_by = null ) {
+		// Try to get from cache first
+		$cache_key = $this->get_cache_key( 'get_sets', array( $offset, $num_rows, $order_by ) );
+		$cached = $this->get_cached( $cache_key );
+		if ( false !== $cached ) {
+			return $cached;
+		}
+
 		// first fetch (a possibly limited amount of) fontsets
 		$sql = 'SELECT * FROM ' . $this->table_sets . ' s
 				LEFT JOIN ' . $this->table_settings . ' settings
@@ -625,6 +721,9 @@ class FontsamplerDatabase {
 			array_push( $set_with_fonts, $set );
 
 		}
+
+		// Cache the result
+		$this->set_cache( $cache_key, $set_with_fonts );
 
 		return $set_with_fonts;
 	}
@@ -779,7 +878,6 @@ class FontsamplerDatabase {
 	function get_fontset_raw( $font_id ) {
 		$sql    = 'SELECT * FROM ' . $this->table_fonts . ' WHERE `id`=' . $font_id . ' LIMIT 1';
 		$result = $this->wpdb->get_results( $sql, ARRAY_A );
-
 		return 0 == $this->wpdb->num_rows ? false : $result[0];
 	}
 
@@ -788,6 +886,13 @@ class FontsamplerDatabase {
 	 * Read all sets of fonts with font files
 	 */
 	function get_fontsets( $offset = 0, $num_rows = 25, $order_by = null ) {
+		// Try to get from cache first
+		$cache_key = $this->get_cache_key( 'get_fontsets', array( $offset, $num_rows, $order_by ) );
+		$cached = $this->get_cached( $cache_key );
+		if ( false !== $cached ) {
+			return $cached;
+		}
+
 		$sql = 'SELECT f.id, f.name, ';
 		foreach ( $this->fontsampler->font_formats as $format ) {
 			$sql .= ' ( SELECT guid FROM ' . $this->wpdb->prefix . 'posts p 
@@ -802,11 +907,14 @@ class FontsamplerDatabase {
 			$sql .= $order_by;
 		}
 
-		$sql .= ' LIMIT ' . $offset . ',' . $num_rows . ' ';
+		$sql .= ' LIMIT ' . $offset . ',' . $num_rows;
 
 		$result = $this->wpdb->get_results( $sql, ARRAY_A );
 
-		return 0 == $this->wpdb->num_rows ? false : $result;
+		// Cache the result
+		$this->set_cache( $cache_key, $result );
+
+		return $result;
 	}
 
 
@@ -1011,14 +1119,16 @@ class FontsamplerDatabase {
 
 	function insert_set( $data ) {
 		$res = $this->wpdb->insert( $this->table_sets, $data );
-
+		// Invalidate cache when inserting new set
+		$this->invalidate_cache( 'get_sets' );
 		return $res ? $this->wpdb->insert_id : false;
 	}
 
 
 	function update_set( $data, $id ) {
 		$res = $this->wpdb->update( $this->table_sets, $data, array( 'id' => $id ) );
-
+		// Invalidate cache when updating set
+		$this->invalidate_cache( 'get_sets' );
 		return $res !== false ? true : false;
 	}
 
@@ -1026,6 +1136,8 @@ class FontsamplerDatabase {
 	function delete_set( $id ) {
 		$this->wpdb->delete( $this->table_join, array( 'set_id' => $id ) );
 		$this->wpdb->delete( $this->table_sets, array( 'id' => $id ) );
+		// Invalidate cache when deleting set
+		$this->invalidate_cache( 'get_sets' );
 
 		return true;
 	}
