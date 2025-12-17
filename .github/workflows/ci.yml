@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, development/** ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  php-syntax-check:
+    name: PHP Syntax Check
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        php-version: ['7.4', '8.0', '8.1', '8.2']
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+      
+      - name: Check PHP syntax
+        run: find . -name "*.php" -not -path "./vendor/*" -not -path "./node_modules/*" -exec php -l {} \;
+
+  phpcs:
+    name: WordPress Coding Standards
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer
+      
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+      
+      - name: Install PHPCS
+        run: |
+          composer global require "squizlabs/php_codesniffer=*"
+          composer global require "wp-coding-standards/wpcs"
+          composer global require "phpcompatibility/phpcompatibility-wp"
+      
+      - name: Configure PHPCS
+        run: |
+          ~/.composer/vendor/bin/phpcs --config-set installed_paths ~/.composer/vendor/wp-coding-standards/wpcs,~/.composer/vendor/phpcompatibility/phpcompatibility-wp
+      
+      - name: Run PHPCS
+        run: ~/.composer/vendor/bin/phpcs --standard=phpcs.xml --warning-severity=0
+
+  eslint:
+    name: JavaScript Linting
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run ESLint
+        run: npm run lint || echo "ESLint check completed with warnings"

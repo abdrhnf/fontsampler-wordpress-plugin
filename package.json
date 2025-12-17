@@ -1,15 +1,18 @@
 {
   "name": "fontsampler",
-  "version": "0.3.8",
-  "description": "Wordpress plugin for testing webfonts; dev dependencies",
+  "version": "0.4.14",
+  "description": "WordPress plugin for testing webfonts - Actively maintained fork by Bahasatype",
   "main": "js/main.js",
   "scripts": {
-    "test": "libs",
+    "test": "npm run lint",
     "build": "node r.js -o build.js",
     "build-admin": "node r.js -o build-admin.js",
     "less": "lessc css/fontsampler-css.less css/fontsampler-css.css",
     "less-admin": "lessc admin/css/fontsampler-admin.less admin/css/fontsampler-admin.css",
-    "watch": "npm-watch"
+    "watch": "npm-watch",
+    "lint": "eslint js/**/*.js admin/js/**/*.js --ignore-pattern '*.min.js'",
+    "lint:fix": "eslint js/**/*.js admin/js/**/*.js --ignore-pattern '*.min.js' --fix",
+    "format": "prettier --write 'js/**/*.js' 'admin/js/**/*.js'"
   },
   "watch": {
     "build": {
@@ -39,16 +42,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kontur/fontsampler-wordpress-plugin.git"
+    "url": "https://github.com/abdrhnf/fontsampler-wordpress-plugin.git"
   },
-  "author": "Johannes Neumeier",
-  "license": "GNU",
+  "author": "Abdurrahman Hanif <abdrhnf@bahasatype.com> (https://bahasatype.com)",
+  "contributors": [
+    "Johannes Neumeier (https://underscoretype.com)"
+  ],
+  "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/kontur/fontsampler-wordpress-plugin/issues"
+    "url": "https://github.com/abdrhnf/fontsampler-wordpress-plugin/issues"
   },
-  "homepage": "https://github.com/kontur/fontsampler-wordpress-plugin",
+  "homepage": "https://github.com/abdrhnf/fontsampler-wordpress-plugin",
   "devDependencies": {
-    "npm-watch": "^0.3.0"
-  },
-  "dependencies": {}
+    "eslint": "^8.57.1",
+    "npm-watch": "^0.3.0",
+    "prettier": "^3.7.4"
+  }
 }
