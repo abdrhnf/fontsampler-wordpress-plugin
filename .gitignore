@@ -8,10 +8,12 @@ admin/css/*
 !admin/css/fontsampler-admin.css
 
 bower_components
-node_modules
-
+node_modules/
+.DS_Store
+.idea
 .vscode
-
+dist/
+*.log
 README.md
 
 vendor/twig/twig/doc
